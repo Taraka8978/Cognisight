@@ -1,6 +1,6 @@
-# Focus Sentry
+# Cognisight
 
-Focus Sentry is an AI powered focus tracking tool that uses your webcam to measure screen attention in real time.  
+Cognisight is an AI powered focus tracking tool that uses your webcam to measure screen attention in real time.  
 It detects whether your eyes and head remain oriented toward the display, alerts you when you drift, logs detailed session data, and sends optional email or SMS summaries.
 
 This project demonstrates structured Python backend design, computer vision using ONNX Runtime, a real time browser UI, persistent session history, and optional external integrations.
@@ -19,7 +19,7 @@ This project demonstrates structured Python backend design, computer vision usin
  11. License
 
 ## 1. Overview
-Focus Sentry uses your webcam to estimate attention by combining face detection, eye openness checks, and head pose orientation.  
+Cognisight uses your webcam to estimate attention by combining face detection, eye openness checks, and head pose orientation.  
 If the user looks away longer than the configured threshold, an alert is shown and unfocused time is recorded.  
 At the end of the session, a summary is displayed and can optionally be sent via email or SMS.
 
@@ -41,8 +41,8 @@ At the end of the session, a summary is displayed and can optionally be sent via
 Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/focus_sentry.git
-cd focus_sentry
+git clone https://github.com/yourusername/Cognisight.git
+cd Cognisight
 ```
 
 Create and activate a virtual environment:
@@ -71,7 +71,7 @@ Edit `.env` and fill in your SMTP and optional Twilio values.
 Run the app using uvicorn:
 
 ```bash
-uvicorn focus_sentry.app:app –reload
+uvicorn Cognisight.app:app –reload
 ```
 
 Open your browser: 
@@ -90,7 +90,7 @@ FOCUS_SMTP_PORT=587
 FOCUS_SMTP_USERNAME=your_email@gmail.com
 FOCUS_SMTP_PASSWORD=your_google_app_password
 FOCUS_SMTP_USE_TLS=true
-FOCUS_EMAIL_FROM=“Focus Sentry your_email@gmail.com￼”
+FOCUS_EMAIL_FROM=“Cognisight your_email@gmail.com￼”
 
 # Twilio SMS (optional)
 
@@ -110,7 +110,7 @@ To use Gmail as the email sender:
 5. Use your full Gmail address for `FOCUS_SMTP_USERNAME`  
 6. Keep TLS enabled
 
-After this, Focus Sentry can send email summaries.
+After this, Cognisight can send email summaries.
 
 ## 7. SMS Setup (Twilio Free Tier)
 
@@ -132,9 +132,9 @@ This activates SMS summaries during focus sessions.
 ## 8. Project Structure
 
 ```
-focus_sentry/
+Cognisight/
 │
-├── focus_sentry/
+├── Cognisight/
 │   ├── detector.py           # ONNX based face and eye state analysis
 │   ├── database.py           # SQLite session storage and helpers
 │   ├── notifier.py           # Email and SMS summary services
