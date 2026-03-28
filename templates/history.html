@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Focus Sentry - History</title>
+    <link rel="stylesheet" href="/static/styles.css?v=2"/>
+</head>
+<body>
+<div class="app-shell">
+    <header class="app-header">
+        <div class="app-header-inner">
+            <div class="app-title">Focus <span>Sentry</span></div>
+            <nav class="app-nav">
+                <a href="/">Current session</a>
+                <a href="/history" class="active">History</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <div class="app-main-inner">
+
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">Recent sessions</div>
+                        <div class="card-subtitle">
+                            Review how your focus is trending over time.
+                        </div>
+                    </div>
+                </div>
+
+                {% if sessions and sessions|length > 0 %}
+                    <p class="history-intro">
+                        The table lists your latest sessions. Use the filters below to update the stats and chart.
+                    </p>
+
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Started at (UTC)</th>
+                                    <th>Duration (min)</th>
+                                    <th>Total (s)</th>
+                                    <th>Focus %</th>
+                                    <th>Breaks</th>
+                                    <th>Ended early</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for s in sessions %}
+                                <tr>
+                                    <td>{{ s.created_at }}</td>
+                                    <td>{{ s.duration_minutes }}</td>
+                                    <td>{{ s.total_seconds or "" }}</td>
+                                    <td>{{ s.focus_percent if s.focus_percent is not none else "" }}</td>
+                                    <td>{{ s.breaks_count or "" }}</td>
+                                    <td>{{ "Yes" if s.ended_early else "No" }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="history-intro">
+                        No sessions recorded yet. Start a session to build your history.
+                    </p>
+                {% endif %}
+            </div>
+
+            {% if sessions and sessions|length > 0 %}
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Focus analytics</div>
+                </div>
+
+                <div id="history-controls" style="margin-bottom: 0.5rem;">
+                    <span style="font-size: 0.85rem;">View stats for:</span>
+                    <button type="button" data-range="7" class="history-filter-button">Last 7 days</button>
+                    <button type="button" data-range="30" class="history-filter-button">Last 30 days</button>
+                    <button type="button" data-range="all" class="history-filter-button history-filter-active">
+                        All
+                    </button>
+                </div>
+
+                <div id="history-summary" style="margin-bottom: 0.7rem;">
+                    <p id="range-label">Showing stats for: all loaded sessions</p>
+                    <p id="avg-focus">Average focus: n/a</p>
+                    <p id="best-session">Best session: n/a</p>
+                </div>
+
+                <canvas id="focusChart" width="600" height="260"></canvas>
+            </div>
+
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script>
+                const sessionsData = {{ sessions | tojson }};
+            </script>
+            <script src="/static/history.js"></script>
+            {% endif %}
+
+        </div>
+    </main>
+</div>
+</body>
+</html>

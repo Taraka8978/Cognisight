@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Focus Sentry</title>
+    <link rel="stylesheet" href="/static/styles.css?v=2"/>
+</head>
+<body>
+<div class="app-shell">
+    <header class="app-header">
+        <div class="app-header-inner">
+            <div class="app-title">Focus <span>Sentry</span></div>
+            <nav class="app-nav">
+                <a href="/" class="active">Current session</a>
+                <a href="/history">History</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <div class="app-main-inner">
+
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">Session configuration</div>
+                        <div class="card-subtitle">
+                            Set your focus window and alert preferences, then start tracking.
+                        </div>
+                    </div>
+                    <div class="tag">Webcam based focus tracker</div>
+                </div>
+
+                <form id="session-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="duration-input">Duration (minutes)</label>
+                            <input
+                                id="duration-input"
+                                type="number"
+                                name="duration"
+                                value="60"
+                                min="1"
+                                required
+                            />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="threshold-input">Alert threshold (seconds away from screen)</label>
+                            <input
+                                id="threshold-input"
+                                type="number"
+                                name="alert_threshold"
+                                value="2.5"
+                                min="0.5"
+                                step="0.5"
+                                required
+                            />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="alert-mode-select">Alert mode</label>
+                            <select id="alert-mode-select" name="alert_mode">
+                                <option value="popup" selected>Popup</option>
+                                <option value="sound">Sound</option>
+                                <option value="both">Popup and sound</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email-input">Email for summary</label>
+                            <input
+                                id="email-input"
+                                type="email"
+                                name="email"
+                                placeholder="you@example.com"
+                            />
+                            <div class="form-inline">
+                                <input type="checkbox" name="send_email" checked />
+                                <span>Send email summary</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone-input">Phone for SMS summary (with country code)</label>
+                            <input
+                                id="phone-input"
+                                type="tel"
+                                name="phone"
+                                placeholder="+1..."
+                            />
+                            <div class="form-inline">
+                                <input type="checkbox" name="send_sms" />
+                                <span>Send SMS summary</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Defaults</label>
+                            <div class="form-inline">
+                                <input type="checkbox" id="save-defaults" />
+                                <span>Save these settings as my default</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="button-row">
+                        <button type="submit" class="btn btn-primary">
+                            Start focus session
+                        </button>
+                    </div>
+                </form>
+
+                <div id="session-status"></div>
+            </div>
+
+            <div id="session-panel" class="card" style="display: none;">
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">Session in progress</div>
+                        <div class="card-subtitle">
+                            Keep your eyes on the screen, we will let you know when you drift.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="session-layout">
+                    <div class="session-left">
+                        <div class="session-metrics">
+                            <p>
+                                <span class="metric-label">Timer:</span>
+                                <span id="timer" class="metric-value">Time left: 0:00</span>
+                            </p>
+                            <p>
+                                <span class="metric-label">State:</span>
+                                <span id="focus-status" class="metric-value">Focus state: unknown</span>
+                            </p>
+                            <p>
+                                <span class="metric-label">Live stats:</span>
+                                <span id="live-stats" class="metric-value">
+                                    Focused: 0 percent so far, breaks: 0
+                                </span>
+                            </p>
+                        </div>
+
+                        <div id="focus-banner" class="focus-banner hidden"></div>
+                    </div>
+
+                    <div class="session-right">
+                        <div class="video-wrapper">
+                            <video
+                                id="video"
+                                class="video-preview"
+                                autoplay
+                                playsinline
+                                width="320"
+                                height="240"
+                            ></video>
+                        </div>
+                        <div class="button-row" style="justify-content: flex-start; margin-top: 0.5rem;">
+                            <button
+                                id="end-session-button"
+                                type="button"
+                                class="btn btn-ghost"
+                            >
+                                End session now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="summary-panel" class="card" style="display: none;">
+                <div class="card-header">
+                    <div class="card-title">Session summary</div>
+                </div>
+                <p id="summary-text"></p>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<audio id="alert-sound">
+    <source src="/static/alert-beep.mp3" type="audio/mpeg" />
+</audio>
+
+<script src="/static/main.js"></script>
+</body>
+</html>
